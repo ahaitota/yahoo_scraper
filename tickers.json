@@ -9,6 +9,22 @@
         "CRM",
         "BTC-USD",
         "ETH-USD",
-        "XRP-USD"
+        "XRP-USD",
+        "AAPL",
+        "TSLA",
+        "^GSPC",
+        "^DJI",
+        "SPY",
+        "NFLX",
+        "NDAQ",
+        "F",
+        "GE",
+        "NOK",
+        "SIRI",
+        "AMD",
+        "PLTR",
+        "BBBY",
+        "SPOT",
+        "DIS"
     ]
 }

@@ -8,7 +8,6 @@ from queue import Queue
 import logging
 
 logger = logging.getLogger(__name__)
-
 class YahooScraper:
     def __init__(
         self, tickers: List[str],
@@ -57,12 +56,16 @@ class YahooScraper:
             
     def scrape_tickers(self):
         """
-        Scrape stock data for all tickers.
+        Scrape stock data for all tickers and filter records by date.
         """
         results = []
         for ticker in self.tickers:
-            results.append(self.fetch_data(ticker))
-        return [record for result in results for record in result]
+            records = self.fetch_data(ticker)
+            for record in records:
+                record_date = datetime.fromisoformat(record['date'])
+                if self.start_date <= record_date <= self.end_date:
+                    results.append(record)
+        return results
 
     def save_to_s3(self, data: List[Dict]):
         """
@@ -84,7 +87,10 @@ class YahooScraper:
 
     def run(self, local_test: bool = False, test_file_path: str = "yahoo_finance_data.json"):
         logger.info("Scraping stock data started")
+
         all_data = self.scrape_tickers()
+        all_data.sort(key=lambda record: datetime.fromisoformat(record['date']), reverse=True)
+
         logger.info(f"Scraping completed. Retrieved {len(all_data)} records.")
         
         if local_test:
